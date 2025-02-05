@@ -256,7 +256,7 @@ class PresenceTest {
             val d1Job = launch(start = CoroutineStart.UNDISPATCHED) {
                 d1.events.filterIsInstance<PresenceChanged>().collect(d1Events::add)
             }
-            c1.attachAsync(d1, mapOf("name" to "a", "cursor" to previousCursor)).await()
+            c1.attachAsync(d1, initialPresence = mapOf("name" to "a", "cursor" to previousCursor)).await()
 
             withTimeout(GENERAL_TIMEOUT) {
                 // initialized, my-presence changed
@@ -269,7 +269,7 @@ class PresenceTest {
             val d2Job = launch(start = CoroutineStart.UNDISPATCHED) {
                 d2.events.filterIsInstance<Others>().collect(d2Events::add)
             }
-            c2.attachAsync(d2, mapOf("name" to "b", "cursor" to previousCursor)).await()
+            c2.attachAsync(d2, initialPresence = mapOf("name" to "b", "cursor" to previousCursor)).await()
 
             withTimeout(GENERAL_TIMEOUT) {
                 while (d1Events.isEmpty()) {
@@ -411,7 +411,7 @@ class PresenceTest {
 
             // 01. c2 attaches doc in realtime sync, and c3 attached doc in manual sync.
             c2.attachAsync(d2, initialPresence = mapOf("name" to "b1", "cursor" to cursor)).await()
-            c3.attachAsync(d3, mapOf("name" to "c1", "cursor" to cursor), syncMode = Manual).await()
+            c3.attachAsync(d3, initialPresence = mapOf("name" to "c1", "cursor" to cursor), syncMode = Manual).await()
 
             withTimeout(GENERAL_TIMEOUT) {
                 // c2 watched
@@ -502,7 +502,7 @@ class PresenceTest {
             // 01. c2 attaches doc in realtime sync, and c3 attached doc in manual sync.
             //     c1 receives the watched event from c2.
             c2.attachAsync(d2, initialPresence = mapOf("name" to "b1", "cursor" to cursor)).await()
-            c3.attachAsync(d3, mapOf("name" to "c1", "cursor" to cursor), syncMode = Manual).await()
+            c3.attachAsync(d3, initialPresence = mapOf("name" to "c1", "cursor" to cursor), syncMode = Manual).await()
 
             withTimeout(GENERAL_TIMEOUT) {
                 // c2 watched
